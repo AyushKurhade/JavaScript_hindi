@@ -1,15 +1,19 @@
 // Arrays
 myArr = ['ayush', 'sachin', 'rohit', 1, 30 , 29, 2, true, false]
+console.log(myArr);
+
 console.log(myArr[0]);
 
 const myhero = ['ironman', 'captain america', 'thor', 'hulk' ]
+console.log(myhero);
+
 console.log(myhero[2]);
 
 console.log(myhero.length); 
 
 // Array Methods
 
-myhero.push('thanos')
+myhero.push('thanos') // value added in the last 
 console.log(myhero);
 
 myhero.push('loki')
@@ -41,27 +45,12 @@ console.log(typeof newarr); // string
  let arr = [10, 20, 30, 40, 50];
 console.log(arr);
 
-let sliced = arr.slice(0, 3);
+let sliced = arr.slice(0, 4); // given indexed remains , works on the copy 
 
 
 let spliced = arr.splice(0, 2);
  
 console.log("sliced:", sliced);
-console.log("spliced:", spliced);
+console.log("spliced:", spliced); // change affect the existing array 
 console.log("original arr:", arr);
 
-
-
-// slice, splice
-
-console.log("A ", myArr);
-
-const myn1 = myArr.slice(1, 3)
-
-console.log(myn1);
-console.log("B ", myArr);
-
-
-const myn2 = myArr.splice(1, 3)
-console.log("C ", myArr);
-console.log(myn2);
