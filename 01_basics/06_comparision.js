@@ -12,15 +12,19 @@ console.log("02">1);
 
 console.log("\n")
 
-console.log(null > 0);
-console.log(null == 0);
-console.log(null >= 0);
+console.log(null > 0); // false
+console.log(null == 0); // false
+console.log(null >= 0); // true
 
-// The reason is that an equity check i.e == > < >= <= works diffrently 
-// comparisions converts null to the number , treating it as a 0 
-// thats why in third operation null >= 0 is true i.e 1 
-// similarly null is > 0 is false
+// *****Comparisons (> and >=)***********
+// Comparison operators convert values to numbers.
+//JavaScript converts null to the number 0.
+// null > 0 becomes 0 > 0 (false).null >= 0 becomes 0 >= 0 (true)
 
+// *********Equality Checks (==)***********
+//It does not convert null to 0.
+//null only loosely equals null or undefined
+//Therefore, null == 0 evaluates to false.
 
 console.log("\n")
 
