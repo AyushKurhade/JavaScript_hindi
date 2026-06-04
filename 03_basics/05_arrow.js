@@ -1,6 +1,6 @@
 
 const user = {
-    username: "hitesh",
+    username: "Ayush",
     price: 999,
 
     welcomeMessage: function() {
@@ -14,37 +14,45 @@ const user = {
 // user.username = "sam"
 // user.welcomeMessage()
 
-// console.log(this);
+console.log(this);
 
-// function chai(){
-//     let username = "hitesh"
-//     console.log(this.username);
-// }
+function chai(){
+  //  console.log(this); // returns the global object (window in browsers) because arrow functions do not have their own 'this' context and instead inherit it from the surrounding scope, which is the global scope in this case.
+    let username = "Ayush"
+    console.log(this.username);
+}
 
-// chai()
+chai()
 
-// const chai = function () {
-//     let username = "hitesh"
-//     console.log(this.username);
-// }
+const chai = function () {
+    let username = "Ayush"
+    console.log(this.username);
+}
 
+chai()      // undefined 
+
+
+
+//Arrow function *******************************************
 const chai =  () => {
-    let username = "hitesh"
-    console.log(this);
+    let username = "Ayush"
+    // console.log(this);
+}
+chai()
+
+
+//************basics arrow function 
+const addTwo = (num1, num2) => {
+    return num1 + num2
 }
 
 
-// chai()
+//implicit return function 
+const addTwo = (num1, num2) =>  num1 + num2
 
-// const addTwo = (num1, num2) => {
-//     return num1 + num2
-// }
+const addTwo = (num1, num2) => ( num1 + num2 )
 
-// const addTwo = (num1, num2) =>  num1 + num2
-
-// const addTwo = (num1, num2) => ( num1 + num2 )
-
-const addTwo = (num1, num2) => ({username: "hitesh"})
+const addTwo = (num1, num2) => ({username: "Ayush"})
 
 
 console.log(addTwo(3, 4))
