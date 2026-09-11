@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitHub User Card</title>
+<style>
+  :root{
+    --bg: #0d1117;
+    --panel: #161b22;
+    --line: #30363d;
+    --text: #c9d1d9;
+    --muted: #8b949e;
+    --accent: #3fb950;
+  }
+
+  * { box-sizing: border-box; }
+
+  body{
+    margin: 0;
+    min-height: 100vh;
+    background:
+      linear-gradient(var(--bg), var(--bg)),
+      repeating-linear-gradient(0deg, transparent, transparent 23px, rgba(255,255,255,0.025) 23px, rgba(255,255,255,0.025) 24px);
+    color: var(--text);
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .terminal{
+    width: 100%;
+    max-width: 380px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+  }
+
+  .terminal-bar{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+    background: #0d1117;
+  }
+  .dot{ width: 10px; height: 10px; border-radius: 50%; background: #30363d; }
+  .terminal-bar span.path{
+    margin-left: 8px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .terminal-body{ padding: 20px; }
+
+  .prompt-line{
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .prompt-line .prompt-symbol{ color: var(--accent); }
+
+  #fetch-btn{
+    width: 100%;
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    padding: 10px 14px;
+    font-family: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  #fetch-btn:hover{ background: var(--accent); color: #0d1117; }
+  #fetch-btn:disabled{
+    opacity: 0.5;
+    cursor: default;
+    background: transparent;
+    color: var(--muted);
+    border-color: var(--line);
+  }
+
+  #result{
+    margin-top: 18px;
+  }
+
+  .card{
+    display: none;
+    align-items: center;
+    gap: 14px;
+    padding-top: 18px;
+    border-top: 1px dashed var(--line);
+  }
+  .card.visible{ display: flex; }
+
+  .card img{
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    flex-shrink: 0;
+  }
+
+  .card-info .name{
+    font-size: 14px;
+    color: var(--text);
+    margin: 0 0 6px 0;
+  }
+
+  .card-info .stat{
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0;
+  }
+  .card-info .stat .num{
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .error-line{
+    display: none;
+    margin-top: 14px;
+    font-size: 13px;
+    color: #f85149;
+  }
+  .error-line.visible{ display: block; }
+</style>
+</head>
+<body>
+
+  <div class="terminal">
+    <div class="terminal-bar">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="path">github-lookup.sh</span>
+    </div>
+
+    <div class="terminal-body">
+      <p class="prompt-line"><span class="prompt-symbol">$</span> curl api.github.com/users/hiteshchoudhary</p>
+
+      <button id="fetch-btn">Run request</button>
+
+      <p class="error-line" id="error-line">Request failed. Check the network and try again.</p>
+
+      <div class="card" id="card">
+        <img id="avatar" src="" alt="User avatar">
+        <div class="card-info">
+          <p class="name" id="login"></p>
+          <p class="stat"><span class="num" id="followers"></span> followers</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const btn = document.getElementById('fetch-btn');
+  const card = document.getElementById('card');
+  const errorLine = document.getElementById('error-line');
+  const avatar = document.getElementById('avatar');
+  const loginEl = document.getElementById('login');
+  const followersEl = document.getElementById('followers');
+
+  const requestUrl = 'https://api.github.com/users/hiteshchoudhary';
+
+  btn.addEventListener('click', function () {
+    btn.disabled = true;
+    btn.textContent = 'Fetching...';
+    errorLine.classList.remove('visible');
+    card.classList.remove('visible');
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', requestUrl);
+
+    xhr.onreadystatechange = function () {
+      // readyState 4 === DONE, response fully received
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          const data = JSON.parse(xhr.responseText);
+
+          avatar.src = data.avatar_url;
+          loginEl.textContent = '@' + data.login;
+          followersEl.textContent = data.followers;
+
+          card.classList.add('visible');
+          btn.textContent = 'Run request';
+          btn.disabled = false;
+        } else {
+          errorLine.classList.add('visible');
+          btn.textContent = 'Run request';
+          btn.disabled = false;
+        }
+      }
+    };
+
+    xhr.onerror = function () {
+      errorLine.classList.add('visible');
+      btn.textContent = 'Run request';
+      btn.disabled = false;
+    };
+
+    xhr.send();
+  });
+</script>
+
+</body>
+</html>
